@@ -8,6 +8,7 @@ import ApiService from "../../services/ApiService";
 import ReceivedInvitesArea from "../../components/home/receivedInvitesArea/ReceivedInvitesArea";
 import LoggedUsersArea from "../../components/home/loggedUsersArea/loggedUsersArea";
 import ProfileArea from "../../components/home/profileArea/ProfileArea";
+import ChatArea from "../../components/home/chatArea/ChatArea";
 import Header from "../../components/general/header/Header";
 import Footer from "../../components/general/footer/Footer";
 
@@ -24,6 +25,7 @@ class Home extends React.Component {
     loggedPlayers: [],
     invitesReceived: [],
     invitesSent: [],
+    messages: [],
   };
   async componentDidMount() {
     await this.getPlayer();
@@ -32,10 +34,15 @@ class Home extends React.Component {
         `http://localhost:3002?player=${JSON.stringify(this.state.player)}`
       ),
     });
-    this.state.socket.on("players.logged", (players) =>
+    await this.state.socket.on("players.logged", (players) =>
       this.setLoggedPlayers(players)
     );
-    this.state.socket.on("invite.send", (invites) => this.setInvites(invites));
+    await this.state.socket.on("invite.send", (invites) => {
+      this.setInvites(invites);
+    });
+    await this.state.socket.on("message", (messages) => {
+      this.setState({ messages });
+    });
   }
 
   setInvites = (invites) => {
@@ -82,6 +89,17 @@ class Home extends React.Component {
     this.state.socket.emit("invite.send", invite);
   };
 
+  sendChatMessage = (messageContent) => {
+    if (messageContent.trim()) {
+      const message = {
+        id: this.state.player.id,
+        name: this.state.player.name,
+        messageContent,
+      };
+      this.state.socket.emit("message", message);
+    }
+  };
+
   render() {
     const {
       socket,
@@ -89,6 +107,7 @@ class Home extends React.Component {
       loggedPlayers,
       invitesReceived,
       invitesSent,
+      messages,
     } = this.state;
     return (
       <div className="grid">
@@ -102,7 +121,11 @@ class Home extends React.Component {
               sendInvite={this.sendInvite}
             />
             <ReceivedInvitesArea invitesReceived={invitesReceived} />
-            <div className="boxes__chat">Chat em construção</div>
+            <ChatArea
+              sendChatMessage={this.sendChatMessage}
+              messages={messages.reverse()}
+              player={player}
+            />
           </section>
         </main>
         <Footer />

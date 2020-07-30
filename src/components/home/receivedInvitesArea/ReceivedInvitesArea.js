@@ -18,8 +18,8 @@ const ReceivedInvitesArea = (props) => {
         <h1 className="invites__title">Convites Recebidos</h1>
       </div>
 
-      {invitesReceived.map((i) => (
-        <div key={i} className="invites__list">
+      {invitesReceived.map((i, index) => (
+        <div key={index} className="invites__list">
           <div>
             <DraftsTwoToneIcon color="primary" />
           </div>
