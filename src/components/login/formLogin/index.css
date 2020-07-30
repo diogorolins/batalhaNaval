@@ -1,0 +1,35 @@
+.login {
+  background: #f1f1f1;
+  margin: 10% auto;
+  width: 40%;
+  max-width: 500px;
+  border: 2px solid #472b10;
+  border-radius: 4px;
+  opacity: 95%;
+}
+
+.login__tittle {
+  padding: 20px;
+  font-size: 25px;
+  font-weight: bold;
+  color: #472b10;
+}
+
+.login__input_email {
+  padding: 0 20px 0 20px;
+}
+
+.login__input_password {
+  padding: 0 20px 0 20px;
+}
+
+.login__input___button {
+  padding: 30px 20px 0 20px;
+}
+
+.login__links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 30px 10px 30px;
+}

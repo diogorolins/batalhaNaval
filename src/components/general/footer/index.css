@@ -1,0 +1,9 @@
+.footer {
+  background: #472b10;
+  background-image: url("../../../assets//img/madeira.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  border: 2px solid #472b10;
+  border-radius: 4px;
+}

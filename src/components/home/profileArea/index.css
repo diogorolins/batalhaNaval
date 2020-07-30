@@ -1,0 +1,27 @@
+.profile {
+  background: #f1f1f1;
+  height: 60px;
+  border: 4px solid #472b10;
+  border-radius: 6px;
+  width: 100%;
+  opacity: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile__welcome {
+  font-size: 20px;
+  margin: 15px 0 0 20px;
+}
+
+.profile__profile {
+  margin: 8px 0 0 0;
+  display: flex;
+}
+
+.profile__profile___profile {
+}
+
+.profile__profile___out {
+  margin: 0 10px 0 15px;
+}

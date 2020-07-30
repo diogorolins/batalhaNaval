@@ -1,0 +1,16 @@
+.grid {
+  background: #f1f1f1;
+  display: grid;
+  font-family: "Roboto", sans-serif;
+
+  grid-template-columns: auto;
+  grid-template-rows: 50px 88vh 50px;
+}
+
+.content {
+  background: #472b10;
+  background-image: url("../../assets/img/batalha.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 1800px;
+}

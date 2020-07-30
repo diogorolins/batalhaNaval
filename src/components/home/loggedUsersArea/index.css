@@ -1,0 +1,38 @@
+.users {
+  background: #f1f1f1;
+  margin: 30px auto;
+  border: 4px solid #472b10;
+  border-radius: 6px;
+  width: 22%;
+  opacity: 80%;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+}
+
+.users__title {
+  display: flex;
+  margin: 20px 0 10px 10px;
+}
+
+.users__title h1 {
+  font-size: 20px;
+  margin-left: 10px;
+  margin-top: 2px;
+}
+
+.users__list {
+  margin-top: 20px;
+  margin-left: 15px;
+}
+
+.users__list h1 {
+  font-size: 18px;
+  font-weight: lighter;
+  margin-left: 5px;
+  margin-top: 2px;
+}
+
+.users__list___item {
+  margin-top: 10px;
+  margin-right: 10px;
+}

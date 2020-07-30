@@ -1,0 +1,42 @@
+.signin {
+  background: #f1f1f1;
+  margin: 5% auto;
+  width: 40%;
+  max-width: 500px;
+  border: 2px solid #472b10;
+  border-radius: 4px;
+  opacity: 95%;
+}
+
+.signin__tittle {
+  padding: 20px;
+  font-size: 25px;
+  font-weight: bold;
+  color: #472b10;
+}
+
+.signin__input_name {
+  padding: 0 20px 0 20px;
+}
+
+.signin__input_email {
+  padding: 0 20px 0 20px;
+}
+
+.signin__input_password {
+  padding: 0 20px 0 20px;
+}
+
+.signin__input___button {
+  padding: 30px 20px 20px 20px;
+}
+.signin__input___buttonBack {
+  padding: 0 20px 20px 20px;
+}
+
+.login__links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 30px 10px 30px;
+}
