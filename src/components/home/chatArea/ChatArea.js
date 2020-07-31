@@ -5,7 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import ChatTwoToneIcon from "@material-ui/icons/ChatTwoTone";
 
 import "./index.css";
-import { getElementError } from "@testing-library/react";
+
 const ChatArea = (props) => {
   const { sendChatMessage, messages, player } = props;
   const [message, updateMessage] = useState("");
