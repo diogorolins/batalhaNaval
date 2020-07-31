@@ -5,7 +5,7 @@
   border-radius: 6px;
   width: 30%;
   max-width: 400px;
-  opacity: 80%;
+  opacity: 0.8;
 }
 
 .chat__title {

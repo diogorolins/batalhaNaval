@@ -5,6 +5,7 @@
   max-width: 500px;
   border: 2px solid #472b10;
   border-radius: 4px;
+  opacity: 0.95;
 }
 
 .signin__tittle {
