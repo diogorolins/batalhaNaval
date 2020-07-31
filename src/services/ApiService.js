@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const urlBase = "http://localhost:3001";
+//const urlBase = "http://localhost:3001";
+const urlBase = "https://new-battleship-api.herokuapp.com/";
 
 const api = axios.create({
   baseURL: urlBase,
