@@ -27,12 +27,14 @@ class Home extends React.Component {
     invitesSent: [],
     messages: [],
   };
+
   async componentDidMount() {
+    var API_SOCKET = "https://new-battleship-socket.herokuapp.com/";
+    if (process.env.NODE_ENV === "development")
+      API_SOCKET = "http://localhost:3002";
     await this.getPlayer();
     await this.setState({
-      socket: io(
-        `http://localhost:3002?player=${JSON.stringify(this.state.player)}`
-      ),
+      socket: io(`${API_SOCKET}?player=${JSON.stringify(this.state.player)}`),
     });
     await this.state.socket.on("players.logged", (players) =>
       this.setLoggedPlayers(players)
