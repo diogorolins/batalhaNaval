@@ -1,7 +1,8 @@
 import axios from "axios";
 
-//const urlBase = "http://localhost:3001";
-const urlBase = "https://new-battleship-api.herokuapp.com/";
+var urlBase = "https://new-battleship-api.herokuapp.com/";
+
+if (process.env.NODE_ENV === "development") urlBase = "http://localhost:3001";
 
 const api = axios.create({
   baseURL: urlBase,
