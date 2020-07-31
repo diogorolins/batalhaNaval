@@ -1,14 +1,16 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import io from "socket.io-client";
+import { v4 as uuidv4 } from "uuid";
 
 import { getUserId, getToken } from "../../services/AuthService";
 import ApiService from "../../services/ApiService";
+import { sockedURL } from "../../services/SocketService";
 
+import SentInvitesArea from "../../components/home/SentInvitesArea/SentInvitesArea";
 import ReceivedInvitesArea from "../../components/home/receivedInvitesArea/ReceivedInvitesArea";
 import LoggedUsersArea from "../../components/home/loggedUsersArea/loggedUsersArea";
 import ProfileArea from "../../components/home/profileArea/ProfileArea";
-import ChatArea from "../../components/home/chatArea/ChatArea";
 import Header from "../../components/general/header/Header";
 import Footer from "../../components/general/footer/Footer";
 
@@ -25,25 +27,18 @@ class Home extends React.Component {
     loggedPlayers: [],
     invitesReceived: [],
     invitesSent: [],
-    messages: [],
   };
 
   async componentDidMount() {
-    var API_SOCKET = "https://new-battleship-socket.herokuapp.com/";
-    if (process.env.NODE_ENV === "development")
-      API_SOCKET = "http://localhost:3002";
     await this.getPlayer();
     await this.setState({
-      socket: io(`${API_SOCKET}?player=${JSON.stringify(this.state.player)}`),
+      socket: io(`${sockedURL}?player=${JSON.stringify(this.state.player)}`),
     });
     await this.state.socket.on("players.logged", (players) =>
       this.setLoggedPlayers(players)
     );
     await this.state.socket.on("invite.send", (invites) => {
       this.setInvites(invites);
-    });
-    await this.state.socket.on("message", (messages) => {
-      this.setState({ messages });
     });
   }
 
@@ -54,7 +49,7 @@ class Home extends React.Component {
     this.setState({ invitesReceived });
 
     const invitesSent = invites.filter(
-      (i) => i.from.id === this.state.player.id && i.status === "pending"
+      (i) => i.from.id === this.state.player.id
     );
     this.setState({ invitesSent });
   };
@@ -84,6 +79,7 @@ class Home extends React.Component {
 
   sendInvite = (playerId) => {
     const invite = {
+      id: uuidv4(),
       from: this.state.player,
       to: this.state.loggedPlayers.filter((p) => p.id === playerId)[0],
       status: "pending",
@@ -91,15 +87,8 @@ class Home extends React.Component {
     this.state.socket.emit("invite.send", invite);
   };
 
-  sendChatMessage = (messageContent) => {
-    if (messageContent.trim()) {
-      const message = {
-        id: this.state.player.id,
-        name: this.state.player.name,
-        messageContent,
-      };
-      this.state.socket.emit("message", message);
-    }
+  denyInvite = (invite) => {
+    this.state.socket.emit("invite.deny", invite);
   };
 
   render() {
@@ -109,7 +98,6 @@ class Home extends React.Component {
       loggedPlayers,
       invitesReceived,
       invitesSent,
-      messages,
     } = this.state;
     return (
       <div className="grid">
@@ -122,12 +110,12 @@ class Home extends React.Component {
               invitesSent={invitesSent}
               sendInvite={this.sendInvite}
             />
-            <ReceivedInvitesArea invitesReceived={invitesReceived} />
-            <ChatArea
-              sendChatMessage={this.sendChatMessage}
-              messages={messages.reverse()}
-              player={player}
+            <ReceivedInvitesArea
+              invitesReceived={invitesReceived}
+              invitesSent={invitesSent}
+              denyInvite={this.denyInvite}
             />
+            <SentInvitesArea invitesSent={invitesSent.reverse()} />
           </section>
         </main>
         <Footer />

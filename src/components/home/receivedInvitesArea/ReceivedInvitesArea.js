@@ -9,7 +9,7 @@ import Link from "@material-ui/core/Link";
 import "./index.css";
 
 const ReceivedInvitesArea = (props) => {
-  const { invitesReceived } = props;
+  const { invitesReceived, denyInvite } = props;
 
   return (
     <div className="invites">
@@ -23,14 +23,14 @@ const ReceivedInvitesArea = (props) => {
           <div>
             <DraftsTwoToneIcon color="primary" />
           </div>
-          <div className="invites__list___txt">{i.from.name}</div>
+          <div className="invites__list___from">{i.from.name}</div>
           <div className="invites__list___icons">
             <Link href="#">
               <CheckCircleOutlineOutlinedIcon htmlColor="green" />
             </Link>
           </div>
           <div className="invites__list___icons">
-            <Link href="#">
+            <Link href="#" onClick={() => denyInvite(i)}>
               <HighlightOffOutlinedIcon color="error" />
             </Link>
           </div>

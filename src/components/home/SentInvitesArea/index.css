@@ -27,13 +27,31 @@
   margin-left: 10px;
 }
 
-.invites__list___from {
-  width: 70%;
+.invites__list___to {
+  width: 60%;
   padding-left: 10px;
   padding-top: 2px;
   font-size: 18px;
 }
 
-.invites__list___icons {
+.invites__list___loader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.invites__list___loader h1 {
+  color: orange;
+  font-weight: bold;
+  font-size: 18px;
+  padding-right: 10px;
+}
+.invites__list___deny h1 {
+  color: red;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.invites__list___divider {
   margin-left: 10px;
+  margin-top: 15px;
 }
