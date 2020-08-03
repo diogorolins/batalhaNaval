@@ -36,7 +36,9 @@ const LoggedUsersArea = (props) => {
                 color="primary"
                 onClick={() => sendInvite(i.id)}
                 disabled={
-                  invitesSent.filter((s) => s.to.id === i.id).length
+                  invitesSent.filter(
+                    (s) => s.to.id === i.id && s.status === "Pendente"
+                  ).length
                     ? true
                     : false
                 }

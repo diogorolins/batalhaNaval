@@ -17,6 +17,12 @@ const FormLogin = (props) => {
     updatePassword(event.target.value);
   };
 
+  const getEnter = (event) => {
+    if (event.charCode === 13) {
+      login(email, password);
+    }
+  };
+
   return (
     <section className="login">
       <div className="login__tittle">Batalha Naval On-line</div>
@@ -47,6 +53,7 @@ const FormLogin = (props) => {
             value={password}
             onChange={fillPassword}
             label="Senha"
+            onKeyPress={getEnter}
           />
         </div>
         <div className="login__input___button">

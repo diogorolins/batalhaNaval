@@ -5,8 +5,6 @@
   border-radius: 6px;
   width: 22%;
   opacity: 0.8;
-  overflow-y: scroll;
-  scrollbar-width: thin;
 }
 
 .invites__title {
@@ -21,43 +19,33 @@
   margin-bottom: 20px;
 }
 
+.invites__box {
+  margin-left: 15px;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  height: 38%;
+}
+
 .invites__list {
   display: flex;
   margin-top: 20px;
   margin-left: 10px;
 }
 
-.invites__list___to {
-  width: 60%;
+.invites__list___from {
+  width: 70%;
   padding-left: 10px;
   padding-top: 2px;
   font-size: 18px;
 }
 
-.invites__list___loader {
-  display: flex;
-  justify-content: space-between;
-}
-
-.invites__list___loader h1 {
-  color: orange;
-  font-weight: bold;
-  font-size: 18px;
-  padding-right: 10px;
-}
-.invites__list___deny h1 {
-  color: red;
-  font-weight: bold;
+.invites__list___to {
+  width: 70%;
+  padding-left: 10px;
+  padding-top: 2px;
   font-size: 18px;
 }
 
-.invites__list___accept h1 {
-  color: green;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.invites__list___divider {
+.invites__list___icons {
   margin-left: 10px;
-  margin-top: 15px;
 }
