@@ -15,7 +15,7 @@ const ProfileArea = (props) => {
 
   const logoutUser = () => {
     logout();
-    socket.disconnect();
+    socket.emit("player.disconnected", player);
     history.push("/login");
   };
 

@@ -22,30 +22,37 @@ const LoggedUsersArea = (props) => {
         {loggedPlayers.map((i) => (
           <Accordion key={i.id} className="users__list___item">
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={i.status === "free" ? <ExpandMoreIcon /> : ""}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <AccountCircleIcon htmlColor="green" />
-              <h1>{i.name}</h1>
+              <AccountCircleIcon
+                htmlColor={i.status === "free" ? "green" : "red"}
+              />
+              <h1>
+                {i.name}
+                {i.status !== "free" && " está jogando"}
+              </h1>
             </AccordionSummary>
-            <AccordionDetails>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={() => sendInvite(i.id)}
-                disabled={
-                  invitesSent.filter(
-                    (s) => s.to.id === i.id && s.status === "Pendente"
-                  ).length
-                    ? true
-                    : false
-                }
-              >
-                Convidar
-              </Button>
-            </AccordionDetails>
+            {i.status === "free" && (
+              <AccordionDetails>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={() => sendInvite(i.id)}
+                  disabled={
+                    invitesSent.filter(
+                      (s) => s.to.id === i.id && s.status === "Pendente"
+                    ).length
+                      ? true
+                      : false
+                  }
+                >
+                  Convidar
+                </Button>
+              </AccordionDetails>
+            )}
           </Accordion>
         ))}
       </div>

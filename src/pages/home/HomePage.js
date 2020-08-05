@@ -26,6 +26,7 @@ class Home extends React.Component {
       id: "",
       name: "",
       email: "",
+      status: "free",
     },
     snack: {
       open: false,
@@ -46,26 +47,34 @@ class Home extends React.Component {
       open: false,
     },
   };
+  socket = io(sockedURL);
 
   async componentDidMount() {
     await this.getPlayer();
-    this.getSocketMessages();
+    this.connectPlayer();
+    this.checkSocket();
   }
 
-  getSocketMessages = async () => {
-    this.setState({
-      socket: io(`${sockedURL}?player=${JSON.stringify(this.state.player)}`),
+  componentWillUnmount() {
+    this.socket.emit("player.disconnected", this.state.player);
+    this.socket.disconnect();
+  }
+
+  connectPlayer = () => {
+    this.socket.emit("player.connected", this.state.player);
+  };
+
+  checkSocket = () => {
+    this.socket.on("players.logged", (players) => {
+      this.setLoggedPlayers(players);
     });
-    await this.state.socket.on("players.logged", (players) =>
-      this.setLoggedPlayers(players)
-    );
-    await this.state.socket.on("invite.send", (invites) => {
+    this.socket.on("invite.send", (invites) => {
       this.setInvites(invites);
     });
-    await this.state.socket.on("invite.accept", (invite) => {
+    this.socket.on("invite.accept", (invite) => {
       this.checkIfMyInviteWasAccepted(invite);
     });
-    await this.state.socket.on("invite.gameCanStart", (inviteId) => {
+    this.socket.on("invite.gameCanStart", (inviteId) => {
       this.checkIfGameCanStart(inviteId);
     });
   };
@@ -98,6 +107,7 @@ class Home extends React.Component {
           id: response.data.id,
           name: response.data.name,
           email: response.data.email,
+          status: "free",
         },
       });
     } catch (err) {
@@ -112,15 +122,15 @@ class Home extends React.Component {
       to: this.state.loggedPlayers.filter((p) => p.id === playerId)[0],
       status: "Pendente",
     };
-    this.state.socket.emit("invite.send", invite);
+    this.socket.emit("invite.send", invite);
   };
 
   clearSentInvites = () => {
-    this.state.socket.emit("invite.clear", this.state.player.id);
+    this.socket.emit("invite.clear", this.state.player.id);
   };
 
   denyInvite = (invite) => {
-    this.state.socket.emit("invite.deny", invite);
+    this.socket.emit("invite.deny", invite);
   };
 
   acceptInvite = (invite) => {
@@ -141,25 +151,21 @@ class Home extends React.Component {
     }
   };
 
-  startGame = async () => {
-    await this.state.socket.emit("invite.accept", this.state.inviteAccept);
+  startGame = () => {
+    this.socket.emit("invite.accept", this.state.inviteAccept);
     this.closeDialog();
     if (this.state.inviteAccept.from.id === this.state.player.id) {
       this.props.history.push({
         pathname: "/gameconfig",
         state: { invite: this.state.inviteAccept },
       });
-      await this.state.socket.emit(
-        "invite.gameCanStart",
-        this.state.inviteAccept
-      );
+      this.socket.emit("invite.gameCanStart", this.state.inviteAccept);
     } else {
       this.setState({ backDrop: { open: true } });
     }
   };
 
   checkIfGameCanStart = (inviteId) => {
-    console.log(inviteId);
     if (inviteId === this.state.player.id) {
       this.props.history.push({
         pathname: "/gameconfig",
@@ -211,7 +217,6 @@ class Home extends React.Component {
 
   render() {
     const {
-      socket,
       player,
       loggedPlayers,
       invitesReceived,
@@ -230,7 +235,7 @@ class Home extends React.Component {
           <DialogBox dialog={dialog} success={this.startGame} />
 
           <main className="content">
-            <ProfileArea socket={socket} player={player} />
+            <ProfileArea socket={this.socket} player={player} />
             <section className="boxes">
               <LoggedUsersArea
                 loggedPlayers={loggedPlayers}
