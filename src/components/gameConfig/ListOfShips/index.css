@@ -1,0 +1,26 @@
+.listShips {
+  width: 30%;
+  max-width: 300px;
+  border: 1px solid #472b10;
+  border-radius: 4px;
+  margin: 5px;
+  background-color: #b88c62;
+  padding-left: 20px;
+  padding-top: 50px;
+}
+
+.listShips h1 {
+  font-size: 18px;
+  color: #472b10;
+  margin-bottom: 20px;
+}
+
+.listShips__size {
+  font-size: 22px;
+  color: #472b10;
+  margin-top: 50px;
+  font-weight: bold;
+}
+.listShips__size___number {
+  font-size: 90px;
+}

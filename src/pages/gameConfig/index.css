@@ -1,0 +1,27 @@
+.grid {
+  background: #f1f1f1;
+  display: grid;
+  font-family: "Roboto", sans-serif;
+
+  grid-template-columns: auto;
+  grid-template-rows: 50px 88vh 50px;
+}
+
+.content {
+  background: #472b10;
+  background-image: url("../../assets/img/batalha.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 1800px;
+}
+
+.configGame {
+  background: #f1f1f1;
+  margin: 2% auto;
+  width: 80%;
+  max-width: 1200px;
+  border: 2px solid #472b10;
+  border-radius: 4px;
+  opacity: 0.95;
+  display: flex;
+}

@@ -19,6 +19,12 @@ const ApiService = {
         headers: { Authorization: "Bearer " + token },
       })
       .catch((err) => err.response),
+  getShips: async (token) =>
+    await api
+      .get("ships", {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .catch((err) => err.response),
 };
 
 export default ApiService;

@@ -1,0 +1,36 @@
+.tableBoard__board___td {
+  height: 45px;
+  width: 45px;
+  border: 2px solid #472b10;
+  text-align: center;
+  color: #472b10;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tableBoard__board___td____checked {
+  height: 45px;
+  width: 45px;
+  border: 2px solid #472b10;
+  text-align: center;
+  color: #472b10;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #472b10;
+  color: beige;
+}
+
+.tableBoard__board___td____done {
+  height: 45px;
+  width: 45px;
+  border: 2px solid #472b10;
+  text-align: center;
+  color: #472b10;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: rgb(148, 28, 28);
+  color: rgb(148, 28, 28);
+}

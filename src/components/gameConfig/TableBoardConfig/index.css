@@ -1,0 +1,17 @@
+.tableBoard {
+  width: 70%;
+}
+.tableBoard__tittle {
+  padding: 20px;
+  font-size: 25px;
+  font-weight: bold;
+  color: #472b10;
+}
+
+.tableBoard__board {
+  border: 2px solid #472b10;
+  margin: auto;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
