@@ -19,6 +19,7 @@ class Login extends React.Component {
       severity: "error",
       message: "",
     },
+    waitingLogin: false,
   };
   componentDidMount() {
     if (isAuthenticated()) this.props.history.push("/home");
@@ -26,7 +27,9 @@ class Login extends React.Component {
 
   login = async (email, password) => {
     try {
+      this.setState({ waitingLogin: true });
       const response = await ApiService.login({ email, password });
+      this.setState({ waitingLogin: false });
       if (response.status === 200) {
         login(response.data.token);
         this.props.history.push("/home");
@@ -58,13 +61,17 @@ class Login extends React.Component {
   };
 
   render() {
-    const { snack } = this.state;
+    const { snack, waitingLogin } = this.state;
     return (
       <div className="grid">
         <Header />
         <Snack close={this.closeSnack} snack={snack} />
         <main className="content">
-          <FormLogin login={this.login} openSigninPage={this.openSigninPage} />
+          <FormLogin
+            login={this.login}
+            openSigninPage={this.openSigninPage}
+            waitingLogin={waitingLogin}
+          />
         </main>
         <Footer />
       </div>

@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import "./index.css";
 
 const FormLogin = (props) => {
-  const { login, openSigninPage } = props;
+  const { login, openSigninPage, waitingLogin } = props;
 
   const [email, updateEmail] = useState("");
   const [password, updatePassword] = useState("");
@@ -57,13 +57,19 @@ const FormLogin = (props) => {
           />
         </div>
         <div className="login__input___button">
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={() => login(email, password)}
-          >
-            Entrar
-          </Button>
+          {waitingLogin ? (
+            <Button fullWidth variant="contained" disabled>
+              Aguarde...
+            </Button>
+          ) : (
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => login(email, password)}
+            >
+              Entrar
+            </Button>
+          )}
         </div>
       </div>
       <div className="login__links">
