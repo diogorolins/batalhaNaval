@@ -1,6 +1,6 @@
 import axios from "axios";
 
-var urlBase = "https://new-battleship-api.herokuapp.com/";
+var urlBase = "https://new-battleship-backend.herokuapp.com/";
 
 if (process.env.NODE_ENV === "development") urlBase = "http://localhost:8080";
 
