@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-import { login } from "../../services/AuthService";
 import Snack from "../../services/SnackService";
 import ApiService from "../../services/ApiService";
 
@@ -29,8 +28,11 @@ class Signin extends React.Component {
       try {
         const response = await ApiService.createUser(userFields.user);
         if (response.status === 201) {
-          login(response.data.token);
-          this.props.history.push("/home");
+          this.changeSnack("Usuário cadastrado com sucesso.", "success", true);
+
+          setTimeout(() => {
+            this.props.history.push("/");
+          }, 2000);
         } else {
           this.changeSnack(response.data.error, "error", true);
         }

@@ -1,13 +1,16 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import io from "socket.io-client";
 
 import "./index.css";
 
+import { getUser, getToken } from "../../services/AuthService";
 import ApiService from "../../services/ApiService";
-import { getToken } from "../../services/AuthService";
 import { checkShipIsComplete } from "../../services/ShipUtilService";
 import { mockInvite } from "../../services/mockInvite";
 import Snack from "../../services/SnackService";
+import BackDropBox from "../../services/BackDropService";
+import { sockedURL } from "../../services/SocketService";
 
 import Header from "../../components/general/header/Header";
 import Footer from "../../components/general/footer/Footer";
@@ -16,6 +19,12 @@ import ListOfShips from "../../components/gameConfig/ListOfShips/ListOfShips";
 
 class GameConfig extends React.Component {
   state = {
+    player: {
+      id: "",
+      name: "",
+      email: "",
+      status: "free",
+    },
     invite: "",
     ships: [],
     shipSelected: "",
@@ -29,7 +38,11 @@ class GameConfig extends React.Component {
       severity: "error",
       message: "",
     },
+    backDrop: {
+      open: false,
+    },
   };
+  socket = io(`${sockedURL}/gameConfig`);
 
   async componentDidMount() {
     this.setState({
@@ -37,7 +50,64 @@ class GameConfig extends React.Component {
       invite: mockInvite,
     });
     await this.getShips();
+    await this.getPlayer();
+    this.checkSocket();
   }
+
+  checkSocket = () => {
+    this.socket.on("game.canStart", (games) => {
+      this.checkIfGameCanStart(games);
+    });
+  };
+
+  checkIfGameCanStart = (games) => {
+    const correctGames = games.filter((g) => g.id === this.state.invite.id);
+    if (correctGames.length > 0) {
+      this.goToGamePage(correctGames);
+    }
+  };
+
+  goToGamePage = (games) => {
+    this.props.history.push({
+      pathname: "/game",
+      state: { game: games },
+    });
+  };
+
+  startGame = () => {
+    this.insertGame();
+    this.setState({ backDrop: { open: true } });
+  };
+
+  insertGame = async () => {
+    let game = {
+      id: this.state.invite.id,
+      player: {
+        id: this.state.player.id,
+        ships: this.state.selectedShips,
+      },
+    };
+    console.log(game);
+    this.socket.emit("create.game", game);
+  };
+
+  getPlayer = async () => {
+    const playerEmail = getUser();
+
+    try {
+      const response = await ApiService.getPlayer(playerEmail, getToken());
+      this.setState({
+        player: {
+          id: response.data.id,
+          name: response.data.name,
+          email: response.data.email,
+          status: "free",
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   getShips = async () => {
     const response = await ApiService.getShips(getToken());
@@ -61,7 +131,7 @@ class GameConfig extends React.Component {
     if (!this.verifyNextFreeShip(this.state.ship)) {
       this.setState({
         cellsDone: this.allSelectedCells(),
-        selectedShips: [...this.state.selectedShips, this.state.ship],
+        selectedShips: [...this.state.selectedShips, this.shipWithPositions()],
         gameReadyToStart: true,
       });
       return;
@@ -69,14 +139,20 @@ class GameConfig extends React.Component {
     if (checkShipIsComplete(this.state.selectedCells, this.state.ship)) {
       this.setState({
         cellsDone: this.allSelectedCells(),
-        selectedShips: [...this.state.selectedShips, this.state.ship],
+        selectedShips: [...this.state.selectedShips, this.shipWithPositions()],
         selectedCells: [],
         shipSelected: String(this.verifyNextFreeShip(this.state.ship).id),
         ship: this.verifyNextFreeShip(this.state.ship),
       });
     } else {
-      this.changeSnack("Formato de navio inválido.", "error", true);
+      this.changeSnack("Formato de barco inválido.", "error", true);
     }
+  };
+
+  shipWithPositions = () => {
+    let shipCells = this.state.ship;
+    shipCells.position = this.state.selectedCells;
+    return shipCells;
   };
 
   allSelectedCells = () => {
@@ -135,32 +211,37 @@ class GameConfig extends React.Component {
       selectedShips,
       gameReadyToStart,
       snack,
+      backDrop,
     } = this.state;
 
     return (
-      <div className="grid">
-        <Header />
-        <Snack close={this.closeSnack} snack={snack} />
-        <main className="content">
-          <section className="configGame">
-            <ListOfShips
-              ships={ships}
-              handleChangeShip={this.handleChangeShip}
-              shipSelected={shipSelected}
-              ship={ship}
-              selectedShips={selectedShips}
-            />
-            <TableBoardConfig
-              selectCell={this.selectCell}
-              selectedCells={selectedCells}
-              goToNextShip={this.goToNextShip}
-              cellsDone={cellsDone}
-              gameReadyToStart={gameReadyToStart}
-            />
-          </section>
-        </main>
-        <Footer />
-      </div>
+      <>
+        <BackDropBox open={backDrop.open} />
+        <div className="grid">
+          <Header />
+          <Snack close={this.closeSnack} snack={snack} />
+          <main className="content">
+            <section className="configGame">
+              <ListOfShips
+                ships={ships}
+                handleChangeShip={this.handleChangeShip}
+                shipSelected={shipSelected}
+                ship={ship}
+                selectedShips={selectedShips}
+              />
+              <TableBoardConfig
+                selectCell={this.selectCell}
+                selectedCells={selectedCells}
+                goToNextShip={this.goToNextShip}
+                cellsDone={cellsDone}
+                gameReadyToStart={gameReadyToStart}
+                startGame={this.startGame}
+              />
+            </section>
+          </main>
+          <Footer />
+        </div>
+      </>
     );
   }
 }

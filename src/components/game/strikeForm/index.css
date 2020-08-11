@@ -1,0 +1,31 @@
+.strikeForm {
+  margin: 20px auto;
+  width: 180px;
+  border: 1px solid #472b10;
+  border-radius: 4px;
+  background-color: rgb(245, 219, 181);
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+}
+
+.strikeForm_field {
+  width: 60px;
+  background-color: #f1f1f1;
+  opacity: 0.95;
+}
+
+.strikeForm_button {
+  background-color: rgb(198, 8, 8);
+  width: 85px;
+  border-radius: 4px;
+}
+
+.strikeForm_button_txt {
+  color: #f1f1f1;
+  font-weight: bold;
+}
+
+.strikeForm_button_bt {
+  height: 40px;
+}

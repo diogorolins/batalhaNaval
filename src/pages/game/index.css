@@ -6,15 +6,28 @@
   grid-template-rows: 50px 88vh 50px;
 }
 
-.content {
+.gameContent {
   background: #472b10;
   background-image: url("../../assets/img/batalha.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 1800px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.boxes {
-  display: flex;
-  height: 80vh;
+.game {
+  width: 45%;
+  margin: auto 20px;
+  background: #f1f1f1;
+  border: 2px solid #472b10;
+  border-radius: 4px;
+  opacity: 0.95;
+}
+
+.game__title {
+  font-size: 22px;
+  color: #472b10;
+  font-weight: bold;
+  margin: 10px;
 }

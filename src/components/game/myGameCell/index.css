@@ -1,0 +1,23 @@
+.myTable_board___td {
+  height: 45px;
+  width: 45px;
+  border: 2px solid #472b10;
+  text-align: center;
+  color: #472b10;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: rgb(245, 219, 181);
+}
+
+.myTable_board___td____checked {
+  height: 45px;
+  width: 45px;
+  border: 2px solid #472b10;
+  text-align: center;
+  color: #472b10;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #472b10;
+}

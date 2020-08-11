@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import io from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 
-import { getUserId, getToken } from "../../services/AuthService";
+import { getUser, getToken } from "../../services/AuthService";
 import ApiService from "../../services/ApiService";
 import { sockedURL } from "../../services/SocketService";
 import Snack from "../../services/SnackService";
@@ -99,9 +99,10 @@ class Home extends React.Component {
   };
 
   getPlayer = async () => {
-    const playerId = getUserId();
+    const playerEmail = getUser();
+
     try {
-      const response = await ApiService.getPlayer(playerId, getToken());
+      const response = await ApiService.getPlayer(playerEmail, getToken());
       this.setState({
         player: {
           id: response.data.id,
@@ -167,6 +168,7 @@ class Home extends React.Component {
 
   checkIfGameCanStart = (inviteId) => {
     if (inviteId === this.state.player.id) {
+      //inderir o jogo no banco de dados
       this.props.history.push({
         pathname: "/gameconfig",
         state: { invite: this.state.inviteAccept },

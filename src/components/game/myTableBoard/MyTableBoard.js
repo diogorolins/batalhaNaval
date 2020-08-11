@@ -1,0 +1,40 @@
+import React from "react";
+
+import { table } from "../../../services/TableGameServices";
+
+import StrikeForm from "../strikeForm/StrikeForm";
+import MyGameCell from "../myGameCell/MyGameCell";
+
+import "./index.css";
+
+const col = table.col;
+const rol = table.rol;
+
+const MyTableBoard = (props) => {
+  const { fillStrikeField, strikeField, myShips } = props;
+
+  const clearCellPosition = myShips[0] ? myShips[0].player.ships : 0;
+
+  return (
+    <section className="myTable">
+      <table className="myTable__board">
+        <tbody>
+          {col.map((c) => (
+            <tr key={c} className="myTable_board___tr">
+              {rol.map((r) => (
+                <MyGameCell
+                  key={r + c}
+                  cell={r + c}
+                  clearCellPosition={clearCellPosition}
+                />
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <StrikeForm fillStrikeField={fillStrikeField} strikeField={strikeField} />
+    </section>
+  );
+};
+
+export default MyTableBoard;

@@ -1,0 +1,12 @@
+.myTable {
+  width: 100%;
+  margin: 30px auto;
+}
+
+.myTable__board {
+  border: 2px solid #472b10;
+  margin: auto;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}

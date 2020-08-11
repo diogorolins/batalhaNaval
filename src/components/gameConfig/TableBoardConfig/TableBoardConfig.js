@@ -18,6 +18,7 @@ const TableBoardConfig = (props) => {
     goToNextShip,
     cellsDone,
     gameReadyToStart,
+    startGame,
   } = props;
   return (
     <section className="tableBoard">
@@ -40,7 +41,7 @@ const TableBoardConfig = (props) => {
         </tbody>
       </table>
       {gameReadyToStart ? (
-        <StartGameButton />
+        <StartGameButton startGame={startGame} />
       ) : (
         <NextShipButton goToNextShip={goToNextShip} />
       )}
