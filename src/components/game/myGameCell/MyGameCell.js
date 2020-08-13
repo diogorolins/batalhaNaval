@@ -3,7 +3,7 @@ import React from "react";
 import "./index.css";
 
 const MyGameCell = (props) => {
-  const { cell, clearCellPosition } = props;
+  const { cell, clearCellPosition, strikes } = props;
   let classCell = "";
   let maxPriority = 0;
   let myShipCells = [];
@@ -24,6 +24,11 @@ const MyGameCell = (props) => {
       class: "myTable_board___td",
       check: !myShipCells.includes(cell),
       priority: 2,
+    },
+    {
+      class: "myTable_board___hit",
+      check: strikes.includes(cell),
+      priority: 3,
     },
   ];
 

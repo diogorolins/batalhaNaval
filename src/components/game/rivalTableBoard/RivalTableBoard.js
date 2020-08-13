@@ -9,7 +9,8 @@ import "./index.css";
 const col = table.col;
 const rol = table.rol;
 
-const RivalTableBoard = () => {
+const RivalTableBoard = (props) => {
+  const { strikes } = props;
   return (
     <section className="rivalTable">
       <table className="rivalTable__board">
@@ -17,7 +18,7 @@ const RivalTableBoard = () => {
           {col.map((c) => (
             <tr key={c} className="rivalTable_board___tr">
               {rol.map((r) => (
-                <RivalGameCell key={r + c} cell={r + c} />
+                <RivalGameCell key={r + c} cell={r + c} strikes={strikes} />
               ))}
             </tr>
           ))}

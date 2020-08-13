@@ -29,3 +29,18 @@
 .strikeForm_button_bt {
   height: 40px;
 }
+
+.strikeForm_waiting {
+  display: flex;
+  justify-content: space-between;
+}
+
+.strikeForm_waiting_text {
+  color: #472b10;
+  font-weight: bold;
+  margin-top: 3px;
+}
+
+.strikeForm_waiting_gif {
+  margin-left: 10px;
+}

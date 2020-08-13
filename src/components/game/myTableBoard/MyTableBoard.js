@@ -11,9 +11,16 @@ const col = table.col;
 const rol = table.rol;
 
 const MyTableBoard = (props) => {
-  const { fillStrikeField, strikeField, myShips } = props;
+  const {
+    fillStrikeField,
+    strikeField,
+    myShips,
+    hitStrike,
+    myTurn,
+    strikes,
+  } = props;
 
-  const clearCellPosition = myShips[0] ? myShips[0].player.ships : 0;
+  const clearCellPosition = myShips ? myShips.ships : 0;
 
   return (
     <section className="myTable">
@@ -26,13 +33,19 @@ const MyTableBoard = (props) => {
                   key={r + c}
                   cell={r + c}
                   clearCellPosition={clearCellPosition}
+                  strikes={strikes}
                 />
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-      <StrikeForm fillStrikeField={fillStrikeField} strikeField={strikeField} />
+      <StrikeForm
+        fillStrikeField={fillStrikeField}
+        strikeField={strikeField}
+        hitStrike={hitStrike}
+        myTurn={myTurn}
+      />
     </section>
   );
 };

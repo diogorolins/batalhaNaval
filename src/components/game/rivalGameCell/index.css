@@ -9,3 +9,27 @@
   cursor: pointer;
   background-color: rgb(245, 219, 181);
 }
+
+.rivalTable_board___td____hit {
+  height: 52px;
+  width: 52px;
+  border: 2px solid #472b10;
+  text-align: center;
+  color: #472b10;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: rgb(198, 8, 8);
+}
+
+.rivalTable_board___td____miss {
+  height: 52px;
+  width: 52px;
+  border: 2px solid #472b10;
+  text-align: center;
+  color: #472b10;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: green;
+}

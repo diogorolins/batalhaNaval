@@ -46,12 +46,16 @@ class GameConfig extends React.Component {
 
   async componentDidMount() {
     this.setState({
-      //invite: this.props.location.state.invite,
-      invite: mockInvite,
+      invite: this.props.location.state.invite,
+      //invite: mockInvite,
     });
     await this.getShips();
     await this.getPlayer();
     this.checkSocket();
+  }
+
+  componentWillUnmount() {
+    this.socket.disconnect();
   }
 
   checkSocket = () => {
@@ -70,7 +74,7 @@ class GameConfig extends React.Component {
   goToGamePage = (games) => {
     this.props.history.push({
       pathname: "/game",
-      state: { game: games },
+      state: { game: games, player: this.state.player },
     });
   };
 
@@ -87,7 +91,6 @@ class GameConfig extends React.Component {
         ships: this.state.selectedShips,
       },
     };
-    console.log(game);
     this.socket.emit("create.game", game);
   };
 
