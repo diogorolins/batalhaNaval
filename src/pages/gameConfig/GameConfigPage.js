@@ -46,7 +46,6 @@ class GameConfig extends React.Component {
 
   componentDidMount() {
     this.socket = io(`${sockedURL}/gameConfig`);
-    console.log(this.socket);
     this.setState({
       invite: this.props.location.state.invite,
       //invite: mockInvite,
