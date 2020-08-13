@@ -47,9 +47,10 @@ class Home extends React.Component {
       open: false,
     },
   };
-  socket = io(sockedURL);
+  socket = "";
 
   async componentDidMount() {
+    this.socket = io(sockedURL);
     await this.getPlayer();
     this.connectPlayer();
     this.checkSocket();
