@@ -46,6 +46,7 @@ class GameConfig extends React.Component {
 
   componentDidMount() {
     this.socket = io(`${sockedURL}/gameConfig`);
+    console.log(this.socket);
     this.setState({
       invite: this.props.location.state.invite,
       //invite: mockInvite,
@@ -92,9 +93,8 @@ class GameConfig extends React.Component {
         ships: this.state.selectedShips,
       },
     };
-    console.log("-- Enviando jogo ---");
+
     this.socket.emit("create.game", game);
-    console.log("-- Jogo Enviado ---");
   };
 
   getPlayer = async () => {
