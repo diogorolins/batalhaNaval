@@ -92,7 +92,9 @@ class GameConfig extends React.Component {
         ships: this.state.selectedShips,
       },
     };
+    console.log("-- Enviando jogo ---");
     this.socket.emit("create.game", game);
+    console.log("-- Jogo Enviado ---");
   };
 
   getPlayer = async () => {
