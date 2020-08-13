@@ -131,15 +131,19 @@ class GameConfig extends React.Component {
   };
 
   goToNextShip = () => {
-    if (!this.verifyNextFreeShip(this.state.ship)) {
-      this.setState({
-        cellsDone: this.allSelectedCells(),
-        selectedShips: [...this.state.selectedShips, this.shipWithPositions()],
-        gameReadyToStart: true,
-      });
-      return;
-    }
     if (checkShipIsComplete(this.state.selectedCells, this.state.ship)) {
+      if (!this.verifyNextFreeShip(this.state.ship)) {
+        this.setState({
+          cellsDone: this.allSelectedCells(),
+          selectedShips: [
+            ...this.state.selectedShips,
+            this.shipWithPositions(),
+          ],
+          gameReadyToStart: true,
+        });
+        return;
+      }
+
       this.setState({
         cellsDone: this.allSelectedCells(),
         selectedShips: [...this.state.selectedShips, this.shipWithPositions()],
