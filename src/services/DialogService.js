@@ -6,14 +6,17 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+import "./index.css";
+
 const DialogBox = (props) => {
   const { dialog, success } = props;
-  const { open, title, content, accept } = dialog;
+  const { open, title, content, accept, style } = dialog;
   return (
     <Dialog
       open={open}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      className={style}
     >
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent>

@@ -10,7 +10,7 @@ import { logout } from "../../../services/AuthService";
 import "./index.css";
 
 const ProfileArea = (props) => {
-  const { socket, player } = props;
+  const { socket, player, openProfile } = props;
   const history = useHistory();
 
   const logoutUser = () => {
@@ -27,7 +27,7 @@ const ProfileArea = (props) => {
       </div>
       <div className="profile__profile">
         <div className="profile__profile___profile">
-          <Button variant="contained">
+          <Button variant="contained" onClick={openProfile}>
             <AccountBoxTwoToneIcon htmlColor="brown" /> Perfil
           </Button>
         </div>

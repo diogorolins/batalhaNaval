@@ -217,6 +217,10 @@ class Home extends React.Component {
     });
   };
 
+  openProfile = () => {
+    this.changeSnack("Página em construção.", "error", true);
+  };
+
   render() {
     const {
       player,
@@ -237,7 +241,11 @@ class Home extends React.Component {
           <DialogBox dialog={dialog} success={this.startGame} />
 
           <main className="content">
-            <ProfileArea socket={this.socket} player={player} />
+            <ProfileArea
+              socket={this.socket}
+              player={player}
+              openProfile={this.openProfile}
+            />
             <section className="boxes">
               <LoggedUsersArea
                 loggedPlayers={loggedPlayers}

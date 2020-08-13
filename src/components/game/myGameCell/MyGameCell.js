@@ -27,7 +27,12 @@ const MyGameCell = (props) => {
     },
     {
       class: "myTable_board___hit",
-      check: strikes.includes(cell),
+      check: strikes.filter((s) => s.position === cell && s.hit).length,
+      priority: 3,
+    },
+    {
+      class: "myTable_board___miss",
+      check: strikes.filter((s) => s.position === cell && !s.hit).length,
       priority: 3,
     },
   ];

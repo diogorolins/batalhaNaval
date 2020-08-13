@@ -155,6 +155,7 @@ class GameConfig extends React.Component {
   shipWithPositions = () => {
     let shipCells = this.state.ship;
     shipCells.position = this.state.selectedCells;
+    shipCells.destroyed = false;
     return shipCells;
   };
 

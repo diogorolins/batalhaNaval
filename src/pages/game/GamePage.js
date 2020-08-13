@@ -7,6 +7,7 @@ import "./index.css";
 import { table } from "../../services/TableGameServices";
 import Snack from "../../services/SnackService";
 import { sockedURL } from "../../services/SocketService";
+import DialogBox from "../../services/DialogService";
 
 import MyTableBoard from "../../components/game/myTableBoard/MyTableBoard";
 import RivalTableBoard from "../../components/game/rivalTableBoard/RivalTableBoard";
@@ -31,6 +32,12 @@ class Game extends React.Component {
     strikesReceived: [],
     strikesMade: [],
     strikes: [],
+    dialog: {
+      open: false,
+      title: "",
+      content: "",
+      accept: "",
+    },
   };
   socket = "";
 
@@ -50,6 +57,10 @@ class Game extends React.Component {
     );
   }
 
+  componentWillUnmount() {
+    this.socket.disconnect();
+  }
+
   checkSocket = () => {
     this.socket.on("game.strike", (strikes) => {
       this.receiveStrikes(strikes);
@@ -66,6 +77,16 @@ class Game extends React.Component {
 
   receiveStrikes = (strikes) => {
     const gameStrikes = strikes.filter((s) => s.gameId === this.state.game.id);
+    this.emitStrikeReceivedMessage(gameStrikes);
+    this.checkIfShipWasDestroyed(gameStrikes, this.state.myShips, {
+      message: "Seu barco foi Destruído!",
+      status: "error",
+    });
+    this.checkIfIGameIsOver(gameStrikes, this.state.myShips, {
+      message: "Você perdeu!!",
+      status: "lose",
+    });
+
     this.setState({
       strikes: gameStrikes,
       strikesMade: gameStrikes.filter(
@@ -76,6 +97,20 @@ class Game extends React.Component {
       ),
       myTurn: gameStrikes.length ? true : this.state.myTurn,
     });
+  };
+
+  emitStrikeReceivedMessage = (gameStrikes) => {
+    if (gameStrikes.length) {
+      this.changeSnack(
+        `Você foi atacado na posição ${
+          gameStrikes[gameStrikes.length - 1].position
+        }! Acertou ${
+          gameStrikes[gameStrikes.length - 1].hit ? "um barco!" : "a água!"
+        }`,
+        gameStrikes[gameStrikes.length - 1].hit ? "warning" : "info",
+        true
+      );
+    }
   };
 
   buildStrikeValidations = () => {
@@ -129,7 +164,7 @@ class Game extends React.Component {
   };
 
   strikeHitaShip = () => {
-    this.changeSnack(`Você acertou um barco`, "success", true);
+    this.changeSnack(`Você acertou um barco`, "warning", true);
     const strike = {
       gameId: this.state.game.id,
       playerId: this.state.player.id,
@@ -137,11 +172,60 @@ class Game extends React.Component {
       hit: true,
     };
     this.socket.emit("game.strike", strike);
-    this.setState({
-      strikes: [...this.state.strikes, strike],
-      strikesMade: [...this.state.strikesMade, strike],
-      myTurn: false,
-    });
+    this.setState(
+      {
+        strikes: [...this.state.strikes, strike],
+        strikesMade: [...this.state.strikesMade, strike],
+        myTurn: false,
+      },
+      () => {
+        this.checkIfShipWasDestroyed(
+          this.state.strikesMade,
+          this.state.rivalShips,
+          {
+            message: "Parabéns! Você destruiu um barco",
+            status: "success",
+          }
+        );
+        this.checkIfIGameIsOver(this.state.strikesMade, this.state.rivalShips, {
+          message: "Você venceu!!",
+          status: "win",
+        });
+      }
+    );
+  };
+
+  checkIfIGameIsOver = (gameStrikes, ships, message) => {
+    const activeShips = ships.ships.filter((s) => !s.destroyed);
+    if (!activeShips.length)
+      this.changeDialog(
+        true,
+        message.message,
+        "Clique para voltar para a página principal.",
+        "VOLTAR",
+        message.status === "win" ? "dialogGreen" : "dialogRed"
+      );
+  };
+
+  checkIfShipWasDestroyed = (gameStrikes, ships, message) => {
+    const activeShips = ships.ships.filter((s) => !s.destroyed);
+    const sucessStrikes = gameStrikes
+      .filter((g) => g.hit)
+      .map((m) => m.position);
+
+    for (let i = 0; i < activeShips.length; i++) {
+      if (
+        activeShips[i].position.filter(
+          (item) => !sucessStrikes.some((item2) => item2 === item)
+        ).length === 0
+      ) {
+        activeShips[i].destroyed = true;
+      }
+    }
+
+    if (activeShips.filter((a) => a.destroyed).length) {
+      this.changeSnack(message.message, message.status, true);
+    }
   };
 
   strikeMissShip = () => {
@@ -227,6 +311,26 @@ class Game extends React.Component {
     });
   };
 
+  closeDialog = () => {
+    this.changeDialog(false, "", "", "");
+  };
+
+  changeDialog = (open, title, content, accept, style) => {
+    this.setState({
+      dialog: {
+        open,
+        title,
+        content,
+        accept,
+        style,
+      },
+    });
+  };
+
+  backToHome = () => {
+    this.props.history.push("/home");
+  };
+
   render() {
     const {
       strikeField,
@@ -235,11 +339,13 @@ class Game extends React.Component {
       myTurn,
       strikesReceived,
       strikesMade,
+      dialog,
     } = this.state;
     return (
       <div className="grid">
         <Header />
         <Snack close={this.closeSnack} snack={snack} />
+        <DialogBox dialog={dialog} success={this.backToHome} />
         <main className="gameContent">
           <section className="game">
             <div className="game__title">Meu Jogo</div>

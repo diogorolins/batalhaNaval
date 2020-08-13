@@ -1,0 +1,9 @@
+.dialogGreen {
+  background-color: green;
+  opacity: 0.9;
+}
+
+.dialogRed {
+  background-color: rgb(198, 8, 8);
+  opacity: 0.9;
+}
