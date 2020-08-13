@@ -44,14 +44,14 @@ class GameConfig extends React.Component {
   };
   socket = "";
 
-  async componentDidMount() {
+  componentDidMount() {
     this.socket = io(`${sockedURL}/gameConfig`);
     this.setState({
       invite: this.props.location.state.invite,
       //invite: mockInvite,
     });
-    await this.getShips();
-    await this.getPlayer();
+    this.getShips();
+    this.getPlayer();
     this.checkSocket();
   }
 
