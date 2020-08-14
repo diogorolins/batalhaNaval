@@ -3,6 +3,7 @@ import React from "react";
 import { table } from "../../../services/TableGameServices";
 
 import RivalGameCell from "../rivalGameCell/RivalGameCell";
+import Legend from "../legend/Legend";
 
 import "./index.css";
 
@@ -24,6 +25,7 @@ const RivalTableBoard = (props) => {
           ))}
         </tbody>
       </table>
+      <Legend />
     </section>
   );
 };

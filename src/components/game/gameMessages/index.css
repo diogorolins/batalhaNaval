@@ -1,0 +1,34 @@
+.messages {
+  border: 2px solid #472b10;
+  border-radius: 4px;
+  margin: 15px;
+  padding: 10px;
+  height: 470px;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+}
+
+.messages__message {
+  width: 100%;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.messages__message___hit {
+  width: 100%;
+  margin-bottom: 12px;
+  color: rgb(198, 8, 8);
+  font-weight: bold;
+}
+.messages__message___missed {
+  width: 100%;
+  margin-bottom: 12px;
+  color: rgb(8, 78, 148);
+  font-weight: bold;
+}
+.messages__message___destroy {
+  width: 100%;
+  margin-bottom: 12px;
+  color: green;
+  font-weight: bold;
+}

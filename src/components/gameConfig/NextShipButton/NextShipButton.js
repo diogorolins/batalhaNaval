@@ -10,8 +10,8 @@ const NextShipButton = (props) => {
     <div className="positionButton">
       <Button
         fullWidth
-        color="default"
-        variant="contained"
+        color="primary"
+        variant="outlined"
         onClick={goToNextShip}
       >
         Gravar Posição

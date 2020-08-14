@@ -4,6 +4,9 @@ import io from "socket.io-client";
 
 import "./index.css";
 
+/* import { mockGame } from "../../services/mockGame";
+import { mockPlayer } from "../../services/mockPlayer"; */
+
 import { table } from "../../services/TableGameServices";
 import Snack from "../../services/SnackService";
 import { sockedURL } from "../../services/SocketService";
@@ -11,6 +14,7 @@ import DialogBox from "../../services/DialogService";
 
 import MyTableBoard from "../../components/game/myTableBoard/MyTableBoard";
 import RivalTableBoard from "../../components/game/rivalTableBoard/RivalTableBoard";
+import GameMessages from "../../components/game/gameMessages/GameMessages";
 import Header from "../../components/general/header/Header";
 import Footer from "../../components/general/footer/Footer";
 
@@ -38,16 +42,19 @@ class Game extends React.Component {
       content: "",
       accept: "",
     },
+    messages: [],
   };
   socket = "";
 
   componentDidMount() {
     this.socket = io(`${sockedURL}/game`);
     const game = this.createGame(this.props.location.state.game);
+    //const game = this.createGame(mockGame);
     this.setState(
       {
         game,
         player: this.props.location.state.player,
+        //player: mockPlayer,
       },
       () => {
         this.checkIfisMyTurn();
@@ -65,6 +72,9 @@ class Game extends React.Component {
     this.socket.on("game.strike", (strikes) => {
       this.receiveStrikes(strikes);
     });
+    this.socket.on("game.messages", (messages) => {
+      this.receiveMessages(messages);
+    });
   };
 
   checkIfisMyTurn = () => {
@@ -73,6 +83,13 @@ class Game extends React.Component {
     } else {
       this.setState({ myTurn: true });
     }
+  };
+
+  receiveMessages = (messages) => {
+    console.log(messages);
+    this.setState({
+      messages: messages.filter((m) => m.game === this.state.game.id).reverse(),
+    });
   };
 
   receiveStrikes = (strikes) => {
@@ -97,6 +114,16 @@ class Game extends React.Component {
       ),
       myTurn: gameStrikes.length ? true : this.state.myTurn,
     });
+  };
+
+  sendMessageToServer = (gameMessage, type) => {
+    const message = {
+      message: gameMessage,
+      player: this.state.player,
+      game: this.state.game.id,
+      type,
+    };
+    this.socket.emit("game.messages", message);
   };
 
   emitStrikeReceivedMessage = (gameStrikes) => {
@@ -172,6 +199,12 @@ class Game extends React.Component {
       hit: true,
     };
     this.socket.emit("game.strike", strike);
+
+    this.sendMessageToServer(
+      `${this.state.player.name} acertou um barco na posição ${this.state.strikeField}`,
+      "hit"
+    );
+
     this.setState(
       {
         strikes: [...this.state.strikes, strike],
@@ -179,14 +212,21 @@ class Game extends React.Component {
         myTurn: false,
       },
       () => {
-        this.checkIfShipWasDestroyed(
-          this.state.strikesMade,
-          this.state.rivalShips,
-          {
-            message: "Parabéns! Você destruiu um barco",
-            status: "success",
-          }
-        );
+        if (
+          this.checkIfShipWasDestroyed(
+            this.state.strikesMade,
+            this.state.rivalShips,
+            {
+              message: "Parabéns! Você destruiu um barco",
+              status: "success",
+            }
+          )
+        ) {
+          this.sendMessageToServer(
+            `${this.state.player.name} destruiu um barco.`,
+            "destroy"
+          );
+        }
         this.checkIfIGameIsOver(this.state.strikesMade, this.state.rivalShips, {
           message: "Você venceu!!",
           status: "win",
@@ -197,7 +237,7 @@ class Game extends React.Component {
 
   checkIfIGameIsOver = (gameStrikes, ships, message) => {
     const activeShips = ships.ships.filter((s) => !s.destroyed);
-    if (!activeShips.length)
+    if (!activeShips.length) {
       this.changeDialog(
         true,
         message.message,
@@ -205,9 +245,10 @@ class Game extends React.Component {
         "VOLTAR",
         message.status === "win" ? "dialogGreen" : "dialogRed"
       );
+    }
   };
 
-  checkIfShipWasDestroyed = (gameStrikes, ships, message) => {
+  checkIfShipWasDestroyed = (gameStrikes, ships, message, target) => {
     const activeShips = ships.ships.filter((s) => !s.destroyed);
     const sucessStrikes = gameStrikes
       .filter((g) => g.hit)
@@ -225,7 +266,9 @@ class Game extends React.Component {
 
     if (activeShips.filter((a) => a.destroyed).length) {
       this.changeSnack(message.message, message.status, true);
+      return true;
     }
+    return false;
   };
 
   strikeMissShip = () => {
@@ -236,7 +279,10 @@ class Game extends React.Component {
       position: this.state.strikeField,
       hit: false,
     };
-
+    this.sendMessageToServer(
+      `${this.state.player.name} acertou a água na posição ${this.state.strikeField}`,
+      "missed"
+    );
     this.socket.emit("game.strike", strike);
 
     this.setState({
@@ -340,6 +386,7 @@ class Game extends React.Component {
       strikesReceived,
       strikesMade,
       dialog,
+      messages,
     } = this.state;
     return (
       <div className="grid">
@@ -357,6 +404,10 @@ class Game extends React.Component {
               myTurn={myTurn}
               strikes={strikesReceived}
             />
+          </section>
+          <section className="game">
+            <div className="game__title">Mensagens</div>
+            <GameMessages messages={messages} />
           </section>
           <section className="game">
             <div className="game__title">Jogo do Adversário</div>

@@ -1,46 +1,42 @@
 .myTable_board___td {
-  height: 45px;
-  width: 45px;
-  border: 2px solid #472b10;
+  height: 35px;
+  width: 35px;
+  font-size: 15px;
   text-align: center;
   color: #472b10;
-  border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
   background-color: rgb(245, 219, 181);
 }
 
 .myTable_board___td____checked {
-  height: 45px;
-  width: 45px;
-  border: 2px solid #472b10;
+  height: 35px;
+  width: 35px;
+  font-size: 15px;
   text-align: center;
   color: #472b10;
-  border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
   background-color: #472b10;
 }
 
 .myTable_board___miss {
-  height: 45px;
-  width: 45px;
-  border: 2px solid #472b10;
+  height: 35px;
+  width: 35px;
+  font-size: 15px;
   text-align: center;
   color: rgb(245, 219, 181);
-  border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
   background-color: rgb(8, 78, 148);
 }
 
 .myTable_board___hit {
-  height: 45px;
-  width: 45px;
-  border: 2px solid #472b10;
+  height: 35px;
+  width: 35px;
+  font-size: 15px;
   text-align: center;
   color: #472b10;
-  border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
   background-color: rgb(198, 8, 8);

@@ -1,0 +1,52 @@
+.legend {
+  margin: 20px auto;
+  width: 90%;
+  border: 1px solid #472b10;
+  border-radius: 4px;
+  background-color: rgb(245, 219, 181);
+  display: flex;
+
+  justify-content: space-between;
+  height: 50px;
+}
+
+.legend_red {
+  margin-top: 5px;
+  margin-left: 5px;
+  width: 50%;
+  height: 80%;
+  display: flex;
+}
+
+.legend_red__box {
+  width: 25%;
+  height: 100%;
+  background-color: rgb(198, 8, 8);
+}
+
+.legend_red__text {
+  font-size: 20px;
+  font-weight: bold;
+  margin: auto 10px;
+  color: rgb(198, 8, 8);
+}
+
+.legend_blue__text {
+  margin: auto 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(8, 78, 148);
+}
+
+.legend_blue__box {
+  width: 25%;
+  height: 100%;
+  background-color: rgb(8, 78, 148);
+}
+
+.legend_blue {
+  margin-top: 5px;
+  display: flex;
+  width: 50%;
+  height: 80%;
+}
