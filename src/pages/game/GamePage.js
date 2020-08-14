@@ -86,7 +86,6 @@ class Game extends React.Component {
   };
 
   receiveMessages = (messages) => {
-    console.log(messages);
     this.setState({
       messages: messages.filter((m) => m.game === this.state.game.id).reverse(),
     });
