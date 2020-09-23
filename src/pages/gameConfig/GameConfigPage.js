@@ -7,7 +7,6 @@ import "./index.css";
 import { getUser, getToken } from "../../services/AuthService";
 import ApiService from "../../services/ApiService";
 import { checkShipIsComplete } from "../../services/ShipUtilService";
-import { mockInvite } from "../../services/mockInvite";
 import Snack from "../../services/SnackService";
 import BackDropBox from "../../services/BackDropService";
 import { sockedURL } from "../../services/SocketService";
@@ -67,6 +66,7 @@ class GameConfig extends React.Component {
 
   checkIfGameCanStart = (games) => {
     const correctGames = games.filter((g) => g.id === this.state.invite.id);
+
     if (correctGames.length > 0) {
       this.goToGamePage(correctGames);
     }
@@ -75,7 +75,7 @@ class GameConfig extends React.Component {
   goToGamePage = (games) => {
     this.props.history.push({
       pathname: "/game",
-      state: { game: games, player: this.state.player },
+      state: { game: games[0].id, player: this.state.player },
     });
   };
 
@@ -92,7 +92,7 @@ class GameConfig extends React.Component {
         ships: this.state.selectedShips,
       },
     };
-
+    await ApiService.createGame(game, getToken());
     this.socket.emit("create.game", game);
   };
 

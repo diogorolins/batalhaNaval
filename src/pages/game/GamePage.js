@@ -4,9 +4,8 @@ import io from "socket.io-client";
 
 import "./index.css";
 
-/* import { mockGame } from "../../services/mockGame";
-import { mockPlayer } from "../../services/mockPlayer"; */
-
+import { getToken } from "../../services/AuthService";
+import ApiService from "../../services/ApiService";
 import { table } from "../../services/TableGameServices";
 import Snack from "../../services/SnackService";
 import { sockedURL } from "../../services/SocketService";
@@ -46,18 +45,17 @@ class Game extends React.Component {
   };
   socket = "";
 
-  componentDidMount() {
+  async componentDidMount() {
     this.socket = io(`${sockedURL}/game`);
-    const game = this.createGame(this.props.location.state.game);
-    //const game = this.createGame(mockGame);
+    const game = await this.createGameModel(this.props.location.state.game);
+
     this.setState(
       {
         game,
         player: this.props.location.state.player,
-        //player: mockPlayer,
       },
       () => {
-        this.checkIfisMyTurn();
+        this.setState({ myTurn: this.isMyTurn() });
         this.fillShips();
         this.checkSocket();
       }
@@ -68,6 +66,26 @@ class Game extends React.Component {
     this.socket.disconnect();
   }
 
+  createGameModel = async (game) => {
+    const response = await ApiService.getGame(game, getToken());
+
+    const objectGame = {
+      id: response.data.id,
+      players: [
+        {
+          id: response.data.players[0].id,
+          ships: response.data.players[0].ships,
+        },
+        {
+          id: response.data.players[1].id,
+          ships: response.data.players[1].ships,
+        },
+      ],
+    };
+
+    return objectGame;
+  };
+
   checkSocket = () => {
     this.socket.on("game.strike", (strikes) => {
       this.receiveStrikes(strikes);
@@ -77,12 +95,8 @@ class Game extends React.Component {
     });
   };
 
-  checkIfisMyTurn = () => {
-    if (this.state.player.id === this.state.game.players[1].id) {
-      this.setState({ myTurn: false });
-    } else {
-      this.setState({ myTurn: true });
-    }
+  isMyTurn = () => {
+    return this.state.player.id === this.state.game.players[1].id;
   };
 
   receiveMessages = (messages) => {
@@ -162,23 +176,6 @@ class Game extends React.Component {
     ];
   };
 
-  createGame = (games) => {
-    const objectGame = {
-      id: games[0].id,
-      players: [
-        {
-          id: games[0].player.id,
-          ships: games[0].player.ships,
-        },
-        {
-          id: games[1].player.id,
-          ships: games[1].player.ships,
-        },
-      ],
-    };
-    return objectGame;
-  };
-
   hitStrike = (a) => {
     const strikeValidations = this.buildStrikeValidations();
     strikeValidations.forEach((v) => {
@@ -236,6 +233,7 @@ class Game extends React.Component {
 
   checkIfIGameIsOver = (gameStrikes, ships, message) => {
     const activeShips = ships.ships.filter((s) => !s.destroyed);
+    if (message.status === "win") this.saveWinnerGame();
     if (!activeShips.length) {
       this.changeDialog(
         true,
@@ -247,7 +245,15 @@ class Game extends React.Component {
     }
   };
 
-  checkIfShipWasDestroyed = (gameStrikes, ships, message, target) => {
+  saveWinnerGame = async () => {
+    await ApiService.setWinner(
+      this.state.game.id,
+      this.state.player.id,
+      getToken()
+    );
+  };
+
+  checkIfShipWasDestroyed = (gameStrikes, ships, message) => {
     const activeShips = ships.ships.filter((s) => !s.destroyed);
     const sucessStrikes = gameStrikes
       .filter((g) => g.hit)

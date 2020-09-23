@@ -33,6 +33,14 @@ const ApiService = {
     await api.get(`games/${gameId}`, {
       headers: { Authorization: "Bearer " + token },
     }),
+  setWinner: async (gameId, playerId, token) =>
+    await api.put(
+      `games/${gameId}`,
+      { playerId },
+      {
+        headers: { Authorization: "Bearer " + token },
+      }
+    ),
 };
 
 export default ApiService;
