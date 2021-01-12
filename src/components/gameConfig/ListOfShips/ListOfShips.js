@@ -25,11 +25,8 @@ const ListOfShips = (props) => {
               value={String(s.id)}
               control={<Radio color="default" />}
               label={s.name}
-              disabled={
-                selectedShips.filter((f) => f.id === s.id).length === 0
-                  ? false
-                  : true
-              }
+              disabled={true}
+           
             />
           ))}
         </RadioGroup>
